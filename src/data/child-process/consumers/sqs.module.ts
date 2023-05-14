@@ -10,7 +10,6 @@ import { AppMessageHandler, QuerybusQueue } from './create-user.consumer';
       producers: [],
     }),
   ],
-  controllers: [],
   providers: [AppMessageHandler],
 })
 export class SQSModule {}

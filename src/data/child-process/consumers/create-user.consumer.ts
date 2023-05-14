@@ -1,5 +1,5 @@
 import { Message, SQSClient } from '@aws-sdk/client-sqs';
-import { Injectable } from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 import { SqsConsumerEventHandler, SqsMessageHandler } from '@ssut/nestjs-sqs';
 
 @Injectable()
@@ -7,7 +7,10 @@ export class AppMessageHandler {
   constructor() {}
   @SqsMessageHandler(/** name: */ 'query_bus', /** batch: */ false)
   public async handleMessage(message: Message) {
-    console.log('a new message arrivied', message);
+    const logger = new Logger()
+
+    logger.log(`new message ${process.pid} received`)
+    logger.log(message);
   }
 
   @SqsConsumerEventHandler(
@@ -20,7 +23,13 @@ export class AppMessageHandler {
   }
 }
 
-const sqsClient = new SQSClient({ region: 'us-east-1' });
+const sqsClient = new SQSClient({
+  region: 'us-east-1',
+  credentials: {
+    accessKeyId: 'AKIAZC326XQ6RBLJUDPI',
+    secretAccessKey: '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',
+  },
+});
 
 export const QuerybusQueue = {
   name: 'query_bus',
